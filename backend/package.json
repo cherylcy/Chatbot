@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\" ",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon --delay 500ms -q dist/index.js\" ",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -21,7 +21,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.4.2",
+    "mongoose": "^8.5.0",
     "morgan": "^1.10.0",
     "openai": "^4.56.0"
   },
