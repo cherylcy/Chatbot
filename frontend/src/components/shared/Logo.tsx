@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 
@@ -11,6 +10,7 @@ const Logo = () => {
         gap: "8px",
         alignItems: "center",
         textDecoration: "none",
+        marginRight: "auto",
       }}
     >
       <img
@@ -24,11 +24,11 @@ const Logo = () => {
         sx={{
           display: { md: "bolck", sm: "block", xs: "none" },
           mr: "auto",
-          fontWeight: "700",
-          fontSize: "20px",
+          fontWeight: "500",
+          fontSize: "22px",
         }}
       >
-        Sunny
+        Sunnie
       </Typography>
     </Link>
   );
