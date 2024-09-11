@@ -15,6 +15,14 @@ const Signup = () => {
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
+    if (username.trim() === "") {
+      toast.error("Username is required", { id: "signup" });
+      return;
+    }
+    if (password.trim() === "") {
+      toast.error("Password is required", { id: "signup" });
+      return;
+    }
     let firstname = formData.get("firstname") as string | null;
     let lastname = formData.get("lastname") as string | null;
     let email = formData.get("email") as string | null;
@@ -68,12 +76,7 @@ const Signup = () => {
             justifyContent: "center",
           }}
         >
-          <CustomizedInput
-            type="username"
-            name="username"
-            label="Username"
-            required={true}
-          />
+          <CustomizedInput type="username" name="username" label="Username*" />
           <CustomizedInput
             type="firstname"
             name="firstname"
@@ -81,12 +84,7 @@ const Signup = () => {
           />
           <CustomizedInput type="lastname" name="lastname" label="Last Name" />
           <CustomizedInput type="email" name="email" label="Email" />
-          <CustomizedInput
-            type="password"
-            name="password"
-            label="Password"
-            required={true}
-          />
+          <CustomizedInput type="password" name="password" label="Password*" />
           <Button
             type="submit"
             sx={{
