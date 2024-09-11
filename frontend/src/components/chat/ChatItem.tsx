@@ -37,14 +37,11 @@ const ChatItem = ({
 }) => {
   const messageBlocks = extractCodeFromString(content);
   const auth = useAuth();
-  const nameParts = auth?.user?.name.split(" ");
   let nameInitials: string = "";
-  if (nameParts) {
-    nameInitials = nameParts[0][0].toUpperCase();
-    if (nameParts.length >= 2) {
-      nameInitials += nameParts[1][0].toUpperCase();
-    }
-  }
+  console.log(auth?.user);
+  if (auth?.user?.firstname) nameInitials += auth?.user?.firstname[0];
+  if (auth?.user?.lastname) nameInitials += auth?.user?.lastname[0];
+  if (nameInitials === "") nameInitials += auth?.user?.username[0];
 
   return role == "assistant" ? (
     <Box
