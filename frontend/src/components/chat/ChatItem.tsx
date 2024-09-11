@@ -38,7 +38,6 @@ const ChatItem = ({
   const messageBlocks = extractCodeFromString(content);
   const auth = useAuth();
   let nameInitials: string = "";
-  console.log(auth?.user);
   if (auth?.user?.firstname) nameInitials += auth?.user?.firstname[0];
   if (auth?.user?.lastname) nameInitials += auth?.user?.lastname[0];
   if (nameInitials === "") nameInitials += auth?.user?.username[0];
