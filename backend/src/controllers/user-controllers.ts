@@ -26,11 +26,17 @@ export const userSignup = async (
 ) => {
   try {
     // user signup
-    const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(401).send("User already registered");
+    const { username, firstname, lastname, email, password } = req.body;
+    const existingUser = await User.findOne({ username });
+    if (existingUser) return res.status(401).send("Username exists");
     const hashedPassword = await hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({
+      username,
+      firstname,
+      lastname,
+      email,
+      password: hashedPassword,
+    });
     await user.save();
 
     res.clearCookie(COOKIE_NAME, {
@@ -40,7 +46,7 @@ export const userSignup = async (
       domain: "localhost",
     });
 
-    const token = createToken(user._id.toString(), email, "7d");
+    const token = createToken(user._id.toString(), username, "7d");
     const expireDate = new Date();
     expireDate.setDate(expireDate.getDate() + 7);
     res.cookie(COOKIE_NAME, token, {
@@ -51,7 +57,13 @@ export const userSignup = async (
       expires: expireDate,
     });
 
-    return res.status(200).json({ message: "OK", id: user._id.toString() });
+    return res.status(201).json({
+      message: "OK",
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res.status(200).json({ message: "ERROR", cause: error.message });
@@ -65,8 +77,8 @@ export const userLogin = async (
 ) => {
   try {
     // user login
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
     if (!user) return res.status(401).send("User not registered");
     const isPasswordCorret = await compare(password, user.password);
     if (!isPasswordCorret) return res.status(403).send("Incorrect Password");
@@ -78,7 +90,7 @@ export const userLogin = async (
       domain: "localhost",
     });
 
-    const token = createToken(user._id.toString(), email, "7d");
+    const token = createToken(user._id.toString(), username, "7d");
     const expireDate = new Date();
     expireDate.setDate(expireDate.getDate() + 7);
     res.cookie(COOKIE_NAME, token, {
@@ -89,7 +101,69 @@ export const userLogin = async (
       expires: expireDate,
     });
 
-    return res.status(200).json({ message: "OK", id: user._id.toString() });
+    return res.status(200).json({
+      message: "OK",
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ message: "ERROR", cause: error.message });
+  }
+};
+
+export const verifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    //user token check
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res.status(401).send("User not registered or token malfunctioned");
+    }
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permissions didn't match");
+    }
+    return res.status(200).json({
+      message: "OK",
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ message: "ERROR", cause: error.message });
+  }
+};
+
+export const userLogout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    //user token check
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res.status(401).send("User not registered OR Token malfunctioned");
+    }
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permissions didn't match");
+    }
+
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      domain: "localhost",
+      signed: true,
+      path: "/",
+    });
+
+    return res.status(200).json({ message: "OK" });
   } catch (error) {
     console.log(error);
     return res.status(200).json({ message: "ERROR", cause: error.message });

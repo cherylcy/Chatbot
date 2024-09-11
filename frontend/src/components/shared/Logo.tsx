@@ -16,15 +16,15 @@ const Logo = () => {
       <img
         src="sunflower.png"
         alt="sunflower"
-        width={"45px"}
-        height={"45px"}
+        width={"30px"}
+        height={"30px"}
         className="sunflower"
       />
       <Typography
         sx={{
-          display: { md: "bolck", sm: "block", xs: "none" },
+          display: "bolck",
           mr: "auto",
-          fontWeight: "500",
+          fontWeight: "600",
           fontSize: "22px",
         }}
       >

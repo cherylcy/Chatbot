@@ -15,14 +15,24 @@ const chatSchema = new mongoose.Schema({
   },
 });
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
+  username: {
     type: String,
     required: true,
     unique: true,
+  },
+  firstname: {
+    type: String,
+    required: false,
+  },
+  lastname: {
+    type: String,
+    required: false,
+  },
+  email: {
+    type: String,
+    required: false,
+    unique: true,
+    sparse: true,
   },
   password: {
     type: String,
