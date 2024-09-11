@@ -68,7 +68,12 @@ const Signup = () => {
             justifyContent: "center",
           }}
         >
-          <CustomizedInput type="username" name="username" label="Username" />
+          <CustomizedInput
+            type="username"
+            name="username"
+            label="Username"
+            required={true}
+          />
           <CustomizedInput
             type="firstname"
             name="firstname"
@@ -76,7 +81,12 @@ const Signup = () => {
           />
           <CustomizedInput type="lastname" name="lastname" label="Last Name" />
           <CustomizedInput type="email" name="email" label="Email" />
-          <CustomizedInput type="password" name="password" label="Password" />
+          <CustomizedInput
+            type="password"
+            name="password"
+            label="Password"
+            required={true}
+          />
           <Button
             type="submit"
             sx={{

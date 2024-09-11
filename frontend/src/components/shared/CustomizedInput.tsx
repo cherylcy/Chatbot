@@ -4,15 +4,16 @@ type Props = {
   name: string;
   type: string;
   label: string;
+  required?: boolean;
 };
-const CustomizedInput = (props: Props) => {
+const CustomizedInput = ({ name, label, type, required = false }: Props) => {
   return (
     <TextField
       margin="dense"
       InputLabelProps={{ style: { color: "#69827c" } }}
-      name={props.name}
-      label={props.label}
-      type={props.type}
+      name={name}
+      label={label}
+      type={type}
       size="small"
       InputProps={{
         style: {
@@ -21,6 +22,7 @@ const CustomizedInput = (props: Props) => {
           background: "#faf9f7",
         },
       }}
+      required={required}
     />
   );
 };
