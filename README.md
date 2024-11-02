@@ -1,11 +1,8 @@
 
-# MERN Stack AI Chatbot
+# Document-Augmented Chat Platform
 
-This is an AI Chatbot application, inspired by ChatGPT, by using MERN Stack and OpenAI
+This is an AI Chatbot application, using MERN Stack and Gemini.
 
-It's a customized chatbot where each message of the user is stored in DB and can be retrieved and deleted.
+It's a customized chatbot with RAG capabilities, enabling contextual conversations based on user-provided documents.
 
 It's a completely secure application using JWT Tokens, HTTP-Only Cookies, Signed Cookies, Password Encryption, and Middleware Chains.
-
-Contributions are welcome
-
