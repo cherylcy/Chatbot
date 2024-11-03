@@ -82,7 +82,7 @@ export const generateRagChain = async (
       splits,
       embeddings
     );
-    const retriever = vectorstore.asRetriever();
+    const retriever = vectorstore.asRetriever(); // first arg is the number of retrieved docs
 
     // 2. Incorporate the retriever into a question-answering chain.
     const systemPrompt =
