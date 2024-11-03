@@ -5,6 +5,8 @@ import {
   generateChatCompletion,
   sendChatsToUser,
   deleteChats,
+  generateRagChain,
+  generateChatCompletionRAG,
 } from "../controllers/chat-controllers.js";
 
 const chatRoutes = Router();
@@ -15,6 +17,8 @@ chatRoutes.post(
   verifyToken,
   generateChatCompletion
 );
+chatRoutes.post("/create-rag", verifyToken, generateRagChain);
+chatRoutes.post("/new-rag", verifyToken, generateChatCompletionRAG);
 chatRoutes.get("/all-chats", verifyToken, sendChatsToUser);
 chatRoutes.delete("/delete", verifyToken, deleteChats);
 
