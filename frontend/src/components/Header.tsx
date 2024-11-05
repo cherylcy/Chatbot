@@ -2,9 +2,12 @@ import { AppBar, Toolbar } from "@mui/material";
 import Logo from "./shared/Logo";
 import NavigationLink from "./shared/NavigationLink";
 import { useAuth } from "../context/AuthContext";
+import { useChatState } from "../context/ChatStateContext";
 
 const Header = () => {
   const auth = useAuth();
+  const chatState = useChatState();
+
   return (
     <AppBar
       sx={{ bgcolor: "transparent", position: "static", boxShadow: "none" }}
@@ -17,8 +20,9 @@ const Header = () => {
               <NavigationLink
                 to="/chat"
                 bg="#f4d6a2"
-                text="Go To Chat"
+                text="Start a New Chat"
                 textColor="black"
+                onClick={chatState?.startNew}
               />
               <NavigationLink
                 to="/"

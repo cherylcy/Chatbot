@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { ChatStateProvider } from "./context/ChatStateContext.tsx";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5000/api/v1";
@@ -20,12 +21,14 @@ const theme = createTheme({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <Toaster position="top-center" />
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
+      <ChatStateProvider>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <Toaster position="top-center" />
+            <App />
+          </ThemeProvider>
+        </BrowserRouter>
+      </ChatStateProvider>
     </AuthProvider>
   </StrictMode>
 );

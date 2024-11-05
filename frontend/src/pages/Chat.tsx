@@ -1,13 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useChatState } from "../context/ChatStateContext";
 import { Box, Avatar, Typography, Button, IconButton } from "@mui/material";
 import { IoMdSend } from "react-icons/io";
-import {
-  deleteUserChats,
-  getUserChats,
-  sendChatRequest,
-} from "../helpers/api-communicators";
+import { getUserChats, sendChatRequest } from "../helpers/api-communicators";
 import ChatItem from "../components/chat/ChatItem";
 
 type Message = {
@@ -23,6 +20,7 @@ function updateScroll() {
 const Chat = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  const chatState = useChatState();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const handleSubmit = async () => {
@@ -57,7 +55,7 @@ const Chat = () => {
           console.log(err);
         });
     }
-  }, [auth]);
+  }, [auth, chatState]);
 
   return (
     <>
