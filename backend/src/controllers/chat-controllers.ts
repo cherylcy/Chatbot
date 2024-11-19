@@ -53,88 +53,67 @@ export const generateChatCompletion = async (
   }
 };
 
-export const generateRagChain = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const generateRagChain = async (filename: string, username: string) => {
   // initialize a ragChain for this user once a file is uploaded
-  const { filename } = req.body;
-  try {
-    const user = await User.findById(res.locals.jwtData.id);
-    if (!user)
-      return res
-        .status(401)
-        .json({ message: "User not registered or token malfunctioned" });
+  console.log(`Generating RAG Chain for ${username}...`);
+  // 1. Load, chunk and index the contents of the blog to create a retriever.
+  const loader = new PDFLoader(`${process.cwd()}/../uploads/${filename}`);
+  const docs = await loader.load();
 
-    // 1. Load, chunk and index the contents of the blog to create a retriever.
-    const loader = new PDFLoader(
-      `${process.cwd()}/../data/${user.username}/${filename}`
-    );
-    const docs = await loader.load();
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 500,
+    chunkOverlap: 10,
+  });
+  const splits = await textSplitter.splitDocuments(docs);
+  const vectorstore = await MemoryVectorStore.fromDocuments(splits, embeddings);
+  const retriever = vectorstore.asRetriever(); // first arg is the number of retrieved docs
 
-    const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 500,
-      chunkOverlap: 10,
-    });
-    const splits = await textSplitter.splitDocuments(docs);
-    const vectorstore = await MemoryVectorStore.fromDocuments(
-      splits,
-      embeddings
-    );
-    const retriever = vectorstore.asRetriever(); // first arg is the number of retrieved docs
+  // 2. Incorporate the retriever into a question-answering chain.
+  const systemPrompt =
+    "You are an assistant for question-answering tasks. " +
+    "Use the following pieces of retrieved context to answer " +
+    "the question. If you don't know the answer, say that you " +
+    "don't know. Use three sentences maximum and keep the " +
+    "answer concise." +
+    "\n\n" +
+    "{context}";
 
-    // 2. Incorporate the retriever into a question-answering chain.
-    const systemPrompt =
-      "You are an assistant for question-answering tasks. " +
-      "Use the following pieces of retrieved context to answer " +
-      "the question. If you don't know the answer, say that you " +
-      "don't know. Use three sentences maximum and keep the " +
-      "answer concise." +
-      "\n\n" +
-      "{context}";
+  const contextualizeQSystemPrompt =
+    "Given a chat history and the latest user question " +
+    "which might reference context in the chat history, " +
+    "formulate a standalone question which can be understood " +
+    "without the chat history. Do NOT answer the question, " +
+    "just reformulate it if needed and otherwise return it as is.";
 
-    const contextualizeQSystemPrompt =
-      "Given a chat history and the latest user question " +
-      "which might reference context in the chat history, " +
-      "formulate a standalone question which can be understood " +
-      "without the chat history. Do NOT answer the question, " +
-      "just reformulate it if needed and otherwise return it as is.";
+  const contextualizeQPrompt = ChatPromptTemplate.fromMessages([
+    ["system", contextualizeQSystemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", "{input}"],
+  ]);
 
-    const contextualizeQPrompt = ChatPromptTemplate.fromMessages([
-      ["system", contextualizeQSystemPrompt],
-      new MessagesPlaceholder("chat_history"),
-      ["user", "{input}"],
-    ]);
+  const historyAwareRetriever = await createHistoryAwareRetriever({
+    llm,
+    retriever,
+    rephrasePrompt: contextualizeQPrompt,
+  });
 
-    const historyAwareRetriever = await createHistoryAwareRetriever({
-      llm,
-      retriever,
-      rephrasePrompt: contextualizeQPrompt,
-    });
+  const qaPrompt = ChatPromptTemplate.fromMessages([
+    ["system", systemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", "{input}"],
+  ]);
 
-    const qaPrompt = ChatPromptTemplate.fromMessages([
-      ["system", systemPrompt],
-      new MessagesPlaceholder("chat_history"),
-      ["user", "{input}"],
-    ]);
+  const questionAnswerChain = await createStuffDocumentsChain({
+    llm,
+    prompt: qaPrompt,
+  });
 
-    const questionAnswerChain = await createStuffDocumentsChain({
-      llm,
-      prompt: qaPrompt,
-    });
+  const ragChain = await createRetrievalChain({
+    retriever: historyAwareRetriever,
+    combineDocsChain: questionAnswerChain,
+  });
 
-    const ragChain = await createRetrievalChain({
-      retriever: historyAwareRetriever,
-      combineDocsChain: questionAnswerChain,
-    });
-
-    ragChains[user.username] = ragChain;
-    return res.status(200).json({ message: "OK" });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Something went wrong" });
-  }
+  ragChains[username] = ragChain;
 };
 
 export const generateChatCompletionRAG = async (
@@ -162,10 +141,12 @@ export const generateChatCompletionRAG = async (
       role,
       content,
     }));
+
     const chatResponse = await ragChain.invoke({
       input: message,
       chat_history: chats,
     });
+
     chats.push({ role: "user", content: message });
     user.chats.push({ content: message, role: "user" });
     user.chats.push({ content: chatResponse.answer, role: "assistant" });
@@ -219,5 +200,25 @@ export const deleteChats = async (
   } catch (error) {
     console.log(error);
     return res.status(200).json({ message: "ERROR", cause: error.message });
+  }
+};
+
+export const fileUpload = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "User not registered or token malfunctioned" });
+    console.log(req.file.filename);
+    await generateRagChain(req.file.filename, user.username);
+    return res.status(200).json({ message: "OK" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
