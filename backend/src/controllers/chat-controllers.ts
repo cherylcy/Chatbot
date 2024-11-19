@@ -13,7 +13,7 @@ import { MessagesPlaceholder } from "@langchain/core/prompts";
 
 const llm = new ChatGoogleGenerativeAI({
   model: "gemini-1.5-flash",
-  maxOutputTokens: 1024,
+  maxOutputTokens: 100,
   maxRetries: 2,
 });
 
