@@ -2,9 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useChatState } from "../context/ChatStateContext";
-import { Box, Avatar, Typography, Button, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { IoMdSend } from "react-icons/io";
-import { getUserChats, sendChatRequest } from "../helpers/api-communicators";
+import {
+  getUserChats,
+  sendChatRequest,
+  sendRagChatRequest,
+} from "../helpers/api-communicators";
 import ChatItem from "../components/chat/ChatItem";
 
 type Message = {
@@ -30,7 +34,12 @@ const Chat = () => {
     }
     const newMessage: Message = { role: "user", content };
     setChatMessages((prev) => [...prev, newMessage]);
-    const chatData = await sendChatRequest(content);
+    let chatData;
+    if (!chatState?.isRag) {
+      chatData = await sendChatRequest(content);
+    } else {
+      chatData = await sendRagChatRequest(content);
+    }
     setChatMessages([...chatData.chats]);
   };
 

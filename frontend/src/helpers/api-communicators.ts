@@ -86,15 +86,6 @@ export const deleteUserChats = async () => {
   return data;
 };
 
-export const generateRagChain = async (filename: string) => {
-  const res = await axios.post("/chat/create-rag", { filename });
-  if (res.status !== 200) {
-    throw new Error("Unable to generate rag chain");
-  }
-  const data = await res.data;
-  return data;
-};
-
 export const sendRagChatRequest = async (message: string) => {
   const res = await axios.post("/chat/new-rag", { message });
   if (res.status !== 200) {

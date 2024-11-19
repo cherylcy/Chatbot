@@ -1,4 +1,5 @@
 import { fileUpload } from "../../helpers/api-communicators";
+import { useChatState } from "../../context/ChatStateContext";
 
 type Props = {
   bg: string;
@@ -7,9 +8,15 @@ type Props = {
 };
 
 const FileUploader = (props: Props) => {
+  const chatState = useChatState();
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      fileUpload(e.target.files[0]);
+      fileUpload(e.target.files[0])
+        .then(() => chatState?.startRag())
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

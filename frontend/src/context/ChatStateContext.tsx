@@ -1,15 +1,12 @@
 import { createContext, useContext } from "react";
 import { useState, ReactNode } from "react";
-import {
-  deleteUserChats,
-  generateRagChain,
-} from "../helpers/api-communicators";
+import { deleteUserChats } from "../helpers/api-communicators";
 
 type ChatState = {
   newToggle: boolean;
   isRag: boolean;
   startNew: () => Promise<void>;
-  startRag: (filename: string) => Promise<void>;
+  startRag: () => void;
 };
 
 const ChatStateContext = createContext<ChatState | null>(null);
@@ -20,15 +17,17 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
 
   const startNew = async () => {
     deleteUserChats()
-      .then(() => setNewToggle(!newToggle))
+      .then(() => {
+        setNewToggle(!newToggle);
+        setIsRag(false);
+      })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const startRag = async (filename: string) => {
+  const startRag = () => {
     setIsRag(true);
-    await generateRagChain(filename);
   };
 
   const value = {
