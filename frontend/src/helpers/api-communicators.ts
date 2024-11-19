@@ -103,3 +103,19 @@ export const sendRagChatRequest = async (message: string) => {
   const data = await res.data;
   return data;
 };
+
+export const fileUpload = async (file: File) => {
+  if (file) {
+    console.log("Uploading file...");
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await axios.post("/chat/upload", {
+      formData,
+    });
+    if (res.status !== 200) {
+      throw new Error("Unable to upload file");
+    }
+    const data = await res.data;
+    return data;
+  }
+};

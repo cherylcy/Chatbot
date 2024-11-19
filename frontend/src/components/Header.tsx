@@ -1,6 +1,7 @@
 import { AppBar, Toolbar } from "@mui/material";
 import Logo from "./shared/Logo";
 import NavigationLink from "./shared/NavigationLink";
+import FileUploader from "./shared/FileUploader";
 import { useAuth } from "../context/AuthContext";
 import { useChatState } from "../context/ChatStateContext";
 
@@ -23,6 +24,11 @@ const Header = () => {
                 text="Start a New Chat"
                 textColor="black"
                 onClick={chatState?.startNew}
+              />
+              <FileUploader
+                bg="#edc285"
+                text="Upload Context File"
+                textColor="black"
               />
               <NavigationLink
                 to="/"
