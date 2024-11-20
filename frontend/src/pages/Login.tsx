@@ -1,11 +1,12 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import CustomizedInput from "../components/shared/CustomizedInput";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import TextAnimation from "../components/shared/TextAnimation";
+import { getGreeting } from "../helpers/utils";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,18 +32,7 @@ const Login = () => {
     }
   }, [auth]);
 
-  const d = new Date();
-  const currentTime: number = d.getHours();
-  let greeting: string;
-  if (currentTime > 18 && currentTime <= 23) {
-    greeting = "Good evening!";
-  } else if (currentTime >= 5 && currentTime <= 12) {
-    greeting = "Good morning!";
-  } else if (currentTime > 12 && currentTime <= 18) {
-    greeting = "Good afternoon!";
-  } else {
-    greeting = "What a great time to see you!";
-  }
+  const greeting: string = getGreeting();
 
   return (
     <Box
@@ -56,7 +46,7 @@ const Login = () => {
       mt={16}
     >
       <Box>
-        <TextAnimation text={greeting + " My dear friend."} />
+        <TextAnimation text={getGreeting() + " My dear friend."} />
       </Box>
       <form
         onSubmit={handleSubmit}
