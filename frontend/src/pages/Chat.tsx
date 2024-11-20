@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useChatState } from "../context/ChatStateContext";
 import { Box, IconButton } from "@mui/material";
+import TextAnimation from "../components/shared/TextAnimation";
 import { IoMdSend } from "react-icons/io";
 import {
   getUserChats,
@@ -66,43 +67,68 @@ const Chat = () => {
     }
   }, [auth, chatState]);
 
+  let displayName = auth?.user?.firstname;
+  if (auth?.user?.firstname === undefined) {
+    displayName = auth?.user?.username;
+  }
+
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          maxWidth: 900,
-          mx: "auto",
-          px: { sm: 6, xs: 4 },
-        }}
-      >
-        <Box
-          id="chats-display"
-          sx={{
-            width: "100%",
-            height: "80vh",
-            mx: "auto",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "scroll",
-            overflowX: "hidden",
-            overflowY: "auto",
-            scrollBehavior: "smooth",
-          }}
-        >
-          {chatMessages.map((chat, index) => (
-            <ChatItem
-              content={chat.content}
-              role={chat.role}
-              keyIndex={index}
-            />
-          ))}
-          <br />
-          &nbsp;
-          <br />
-        </Box>
-      </Box>
+      <div>
+        {chatMessages.length == 0 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "70vh",
+            }}
+          >
+            <Box>
+              <TextAnimation
+                text={"Hello " + displayName + "!\nWhat can I help you today?"}
+              />
+            </Box>
+          </div>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              maxWidth: 900,
+              mx: "auto",
+              px: { sm: 6, xs: 4 },
+            }}
+          >
+            <Box
+              id="chats-display"
+              sx={{
+                width: "100%",
+                height: "80vh",
+                mx: "auto",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "scroll",
+                overflowX: "hidden",
+                overflowY: "auto",
+                scrollBehavior: "smooth",
+              }}
+            >
+              {chatMessages.map((chat, index) => (
+                <ChatItem
+                  content={chat.content}
+                  role={chat.role}
+                  keyIndex={index}
+                />
+              ))}
+              <br />
+              &nbsp;
+              <br />
+            </Box>
+          </Box>
+        )}
+      </div>
+
       <div
         style={{
           bottom: "0px",
