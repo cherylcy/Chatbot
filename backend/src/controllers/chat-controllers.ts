@@ -13,7 +13,6 @@ import { MessagesPlaceholder } from "@langchain/core/prompts";
 
 const llm = new ChatGoogleGenerativeAI({
   model: "gemini-1.5-flash",
-  maxOutputTokens: 100,
   maxRetries: 2,
 });
 
@@ -57,7 +56,7 @@ const generateRagChain = async (filename: string, username: string) => {
   // initialize a ragChain for this user once a file is uploaded
   console.log(`Generating RAG Chain for ${username}...`);
   // 1. Load, chunk and index the contents of the blog to create a retriever.
-  const loader = new PDFLoader(`${process.cwd()}/../uploads/${filename}`);
+  const loader = new PDFLoader(`${process.cwd()}/uploads/${filename}`);
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
