@@ -11,7 +11,7 @@ import {
 } from "../controllers/chat-controllers.js";
 
 const chatRoutes = Router();
-const upload = multer({ dest: "../uploads/" });
+const upload = multer({ dest: "uploads/" });
 
 chatRoutes.post(
   "/new",
