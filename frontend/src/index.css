@@ -8,6 +8,10 @@ body {
   background: #f3ebe3;
   font-family: "Cormorant Garamond", serif;
 }
+p {
+  /* Control the overall container margin */
+  margin: 0px;
+}
 input {
   font-family: "Lato", serif;
 }
