@@ -86,7 +86,6 @@ Chatbot/
 
 * **Integrating LangChain with Gemini:**  One of the challenges was effectively integrating LangChain with the Gemini API.  This involved understanding how to structure prompts and manage the flow of information between LangChain and Gemini to achieve optimal RAG performance.  I learned a lot about prompt engineering and how to tailor prompts for specific tasks.
 * **Handling PDF Uploads and Processing:** Implementing the PDF upload and processing pipeline presented some challenges.  I gained valuable experience in working with file uploads, parsing PDF content, and creating vector embeddings for semantic search.
-* **Optimizing for Performance:**  Ensuring the chatbot responded quickly, especially when dealing with large PDF documents, required careful attention to performance optimization.  This involved exploring different indexing techniques and caching strategies to minimize latency.
 
 ## Future Improvements
 
