@@ -43,6 +43,17 @@ const ChatItem = ({
   if (auth?.user?.lastname) nameInitials += auth?.user?.lastname[0];
   if (nameInitials === "") nameInitials += auth?.user?.username[0];
 
+  const customStyle = {
+    fontSize: "14px",
+  };
+
+  const codeTagProps = {
+    style: {
+      fontSize: "inherit",
+      lineHeight: "inherit",
+    },
+  };
+
   return role == "assistant" ? (
     <Box
       sx={{
@@ -81,7 +92,12 @@ const ChatItem = ({
           messageBlocks.length &&
           messageBlocks.map((block) =>
             isCodeBlock(block) ? (
-              <SyntaxHighlighter style={coldarkDark} language="javascript">
+              <SyntaxHighlighter
+                style={coldarkDark}
+                language="javascript"
+                customStyle={customStyle}
+                codeTagProps={codeTagProps}
+              >
                 {block}
               </SyntaxHighlighter>
             ) : (
@@ -133,7 +149,12 @@ const ChatItem = ({
           messageBlocks.length &&
           messageBlocks.map((block) =>
             isCodeBlock(block) ? (
-              <SyntaxHighlighter style={coldarkDark} language="javascript">
+              <SyntaxHighlighter
+                style={coldarkDark}
+                language="javascript"
+                customStyle={customStyle}
+                codeTagProps={codeTagProps}
+              >
                 {block}
               </SyntaxHighlighter>
             ) : (
