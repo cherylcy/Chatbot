@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { fileUpload } from "../../helpers/api-communicators";
 import { useChatState } from "../../context/ChatStateContext";
 
@@ -12,9 +13,15 @@ const FileUploader = (props: Props) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      toast.loading("Uploading file", { id: "upload" });
       fileUpload(e.target.files[0])
-        .then(() => chatState?.startRag())
+        .then(() => {
+          toast.success("File uploaded successfully", { id: "upload" });
+          chatState?.startRag();
+          e.target.value = "";
+        })
         .catch((err) => {
+          toast.error("File upload failed", { id: "upload" });
           console.log(err);
         });
     }
