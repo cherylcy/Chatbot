@@ -19,9 +19,10 @@ This project demonstrates a chatbot built using an LLM API (currently Gemini) an
     * Information retrieval and search.
     * Question answering.
 * **Retrieval Augmented Generation (RAG):** Enables users to upload PDF documents and query them directly. The chatbot uses LangChain to process the document, create embeddings, and perform semantic search, allowing for highly relevant responses grounded in the provided document.
-* **User-Friendly Interface:** Built with React for a responsive and intuitive user experience.
-* **Data Persistence:** Uses MongoDB to store user data and potentially uploaded documents (depending on your implementation).
+* **User-Friendly Interface:** Built with Vite, React and Material UI for a responsive and intuitive user experience.
+* **Data Persistence:** Uses MongoDB to store user data and potentially uploaded documents.
 * **Backend API:**  Built with Express.js and TypeScript for a robust and scalable backend.
+* **Security:** Included user authentication and authorization system. Uses JWT authorization tokens, HTTP only cookies. Protects user routes with verification checks.
 
 ## Technologies Used
 
