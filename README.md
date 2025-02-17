@@ -32,7 +32,7 @@ This project demonstrates a chatbot built using an LLM API (currently Gemini) an
 * **Database:** MongoDB
 * **LLM API:** Gemini
 * **LLM Framework:** LangChain
-* **Other:** Node.js, npm/yarn
+* **Other:** Node.js, npm
 
 ## Project Structure
 ```
