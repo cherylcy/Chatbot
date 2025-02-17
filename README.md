@@ -2,6 +2,11 @@
 
 This project demonstrates a chatbot built using an LLM API (currently Gemini) and enhanced with Retrieval Augmented Generation (RAG) capabilities.  It leverages the power of LLMs for general tasks like searching, question answering, and chatting, while also allowing users to upload PDFs for targeted information retrieval.
 
+<img width="700" alt="Basic chat" src="https://github.com/user-attachments/assets/473bd8d7-6a16-4fb5-8786-ee8966e69301" />
+
+<img width="700" alt="Chat based on uploaded PDF document" src="https://github.com/user-attachments/assets/8b453d3b-31be-4ef2-8109-1cf2890190a7" />
+
+
 ## Table of Contents
 
 - [Features](#features)
